@@ -3,40 +3,67 @@ exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: "Method not allowed" }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        error: "Method not allowed",
+      }),
     };
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
 
   if (!apiKey) {
-    console.error("OPENAI_API_KEY is missing in this function.");
+    console.error("OPENAI_API_KEY is missing.");
+
     return {
       statusCode: 500,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        error: "Server setup error: API key is missing.",
+        error: "AI setup is incomplete. Check Netlify environment variables.",
       }),
     };
   }
 
   try {
-    const { rating, feedback } = JSON.parse(event.body || "{}");
+    const { rating, feedback, style } = JSON.parse(
+      event.body || "{}"
+    );
+
+    const stars = Number(rating);
 
     if (
-      !Number.isInteger(Number(rating)) ||
-      Number(rating) < 1 ||
-      Number(rating) > 5 ||
+      !Number.isInteger(stars) ||
+      stars < 1 ||
+      stars > 5 ||
       typeof feedback !== "string" ||
-      feedback.trim().length < 8 ||
+      feedback.trim().length < 2 ||
       feedback.trim().length > 1200
     ) {
       return {
         statusCode: 400,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          error: "Enter a rating from 1–5 and feedback of 8–1200 characters.",
+          error: "Please provide a valid rating and feedback.",
         }),
       };
     }
+
+    const writingStyles = {
+      polished:
+        "Use a polished, professional, natural writing style.",
+      professional:
+        "Use a polished, professional, natural writing style.",
+      casual:
+        "Use a friendly, casual, conversational writing style.",
+      warm:
+        "Use a warm, personal, welcoming writing style.",
+      concise:
+        "Use simple, clear language while still writing 4–5 sentences.",
+    };
+
+    const selectedStyle =
+      writingStyles[String(style || "").toLowerCase()] ||
+      "Use a polished, professional, natural writing style.";
 
     const response = await fetch(
       "https://api.openai.com/v1/responses",
@@ -48,10 +75,36 @@ exports.handler = async (event) => {
         },
         body: JSON.stringify({
           model: "gpt-6-luna",
-          instructions:
-            "Write a natural, concise Google review draft for a cafe based only on the customer's rating and feedback. Do not invent experiences or details. Match the customer's sentiment and language. Return only the review text.",
-          input: `Customer rating: ${rating}/5\nCustomer feedback: ${feedback.trim()}`,
-          max_output_tokens: 180,
+          instructions: `
+You write Google review drafts for a cafe.
+
+Write a natural, high-quality review in 4–5 sentences,
+approximately 50–80 words.
+
+The customer may provide only 2–3 words, such as
+"nice ambience" or "good coffee". Expand their brief
+feedback into a readable review without asking questions.
+
+Rating: ${stars}/5.
+Writing style: ${selectedStyle}
+
+Important rules:
+- Match the sentiment of the rating and feedback.
+- Use simple, natural language that sounds human.
+- Do not repeat the same idea.
+- Do not add headings, quotation marks, or bullet points.
+- Never invent specific menu items, prices, staff actions,
+  facilities, events, or personal experiences.
+- Do not claim the customer visited again or recommends
+  the cafe unless their feedback supports that claim.
+- Use only reasonable general descriptions supported by
+  the customer's words and rating.
+- Return only the review text.
+          `.trim(),
+          input:
+            `Customer rating: ${stars}/5\n` +
+            `Customer feedback: ${feedback.trim()}`,
+          max_output_tokens: 220,
         }),
       }
     );
@@ -67,8 +120,10 @@ exports.handler = async (event) => {
 
       return {
         statusCode: 502,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          error: "Review generation failed. Check Netlify function logs.",
+          error:
+            "Review generation failed. Please try again.",
         }),
       };
     }
@@ -83,19 +138,19 @@ exports.handler = async (event) => {
 
     if (!draft) {
       console.error("OpenAI returned no review text.");
+
       return {
         statusCode: 502,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          error: "No review text was generated. Please try again.",
+          error: "No review was generated. Please try again.",
         }),
       };
     }
 
     return {
       statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ draft }),
     };
   } catch (error) {
@@ -103,8 +158,9 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 500,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        error: "Something went wrong while generating your review.",
+        error: "Something went wrong. Please try again.",
       }),
     };
   }
