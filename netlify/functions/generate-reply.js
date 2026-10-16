@@ -23,75 +23,69 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { rating, feedback, style } = JSON.parse(
-      event.body || "{}"
-    );
-
-    const stars = Number(rating);
-    const customerFeedback =
-      typeof feedback === "string" ? feedback.trim() : "";
+    const body = JSON.parse(event.body || "{}");
+    const stars = Number(body.rating);
+    const feedback =
+      typeof body.feedback === "string" ? body.feedback.trim() : "";
 
     if (
       !Number.isInteger(stars) ||
       stars < 1 ||
       stars > 5 ||
-      customerFeedback.length < 2 ||
-      customerFeedback.length > 1200
+      feedback.length < 2 ||
+      feedback.length > 1200
     ) {
       return json(400, {
         error: "Please enter a valid rating and feedback.",
       });
     }
 
+    // These names match the website's writing-style dropdown.
     const styleText = {
+      "natural & simple":
+        "Use simple, natural everyday English. Keep it relaxed and genuine.",
+      "warm & friendly":
+        "Use warm, friendly, welcoming language without exaggeration.",
       "polished & professional":
-        "Polished but natural, with clear and fluent wording.",
-      "casual & friendly":
-        "Relaxed, friendly, conversational and simple.",
-      "warm & personal":
-        "Warm and sincere, without sounding sentimental.",
-      "short & simple":
-        "Simple everyday English, while still using four complete sentences.",
+        "Use polished, fluent, professional language that still sounds human.",
     };
 
+    const requestedStyle =
+      typeof body.style === "string"
+        ? body.style.trim().toLowerCase()
+        : "";
+
     const selectedStyle =
-      styleText[String(style || "").toLowerCase()] ||
-      "Natural, polished, conversational everyday English.";
+      styleText[requestedStyle] ||
+      "Use natural, warm, conversational English.";
 
     const instructions = `
-You help a cafe customer express their own genuine experience
-in a Google review draft.
+You write Google review drafts that help customers express
+their own genuine cafe experiences.
 
-Write exactly 4 complete sentences, ideally 45–65 words.
+Write exactly 4 or 5 complete sentences, ideally 45–65 words.
+Finish the final sentence fully. Never end mid-sentence.
 
-The customer may provide only two or three words.
-Expand their actual feedback carefully into a readable review.
-Do not ask questions.
+WRITING STYLE:
+${selectedStyle}
 
-STYLE:
-- Sound like a real person, not an advertisement or AI.
-- Use natural, everyday English and varied sentence openings.
-- Keep the wording specific to what the customer actually said.
-- Avoid clichés, exaggerated praise, repeated ideas and filler.
-- Use at most one or two emojis, only if they feel natural.
-  Suitable examples include 😊, ☕ and ✨.
-- Emojis are optional. Do not force them into every review.
+NATURAL TONE:
+- Sound like a real person, not a business advertisement.
+- Use simple, conversational, varied sentence structures.
+- Avoid repetitive openings, generic filler and exaggerated praise.
+- Use 0–2 emojis only when they fit naturally, such as 😊, ☕ or ✨.
+- Emojis are optional; never force them.
 - Do not add headings, quotation marks or hashtags.
-- Finish every sentence completely.
+- Return only the review text.
 
 HONESTY:
-- Match the customer's star rating and stated sentiment.
-- Never invent food or drinks ordered, staff interactions,
-  prices, events, facilities or personal experiences.
+- Base the review on the customer's feedback and star rating.
+- Never invent specific dishes, prices, staff interactions,
+  facilities, events or personal experiences.
+- If feedback is brief, expand it modestly without making up facts.
+- Match the sentiment of the rating and feedback.
 - Do not claim the customer will return or recommend the cafe
   unless their feedback supports that statement.
-- If feedback is very short, do not fill space with invented facts.
-  Elaborate modestly on the stated impression instead.
-- Never turn negative feedback into a positive review.
-- Return only the review draft.
-
-Writing style: ${selectedStyle}
-Customer rating: ${stars}/5
 `.trim();
 
     const response = await fetch(
@@ -105,8 +99,10 @@ Customer rating: ${stars}/5
         body: JSON.stringify({
           model: "gpt-6.1-sol",
           instructions,
-          input: `Customer's own feedback: ${customerFeedback}`,
-          max_output_tokens: 240,
+          input:
+            `Customer rating: ${stars}/5\n` +
+            `Customer's own feedback: ${feedback}`,
+          max_output_tokens: 260,
         }),
       }
     );
