@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8d8e1">
+<title>Amante Bhopal | Share Your Experience</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="brand-banner">
+  <div class="brand-content">
+    <div class="logo-ring"><img src="/amante-logo.jpg" alt="Amante logo"></div>
+    <div class="brand-name">CAFE <span>·</span> BHOPAL</div>
+    <div class="ornament"><i></i><b>✦</b><i></i></div>
+  </div>
+</header>
+<main class="page">
+  <section class="intro">
+    <div class="eyebrow"><i></i><span>YOUR EXPERIENCE MATTERS</span><i></i></div>
+    <h1>Love your<br><em>experience?</em></h1>
+    <p>Every visit becomes a memory.<br>Share a few words about yours.</p>
+  </section>
+  <section class="review-card">
+    <form id="review-form">
+      <label class="field-label">Rate your experience</label>
+      <div class="stars" aria-label="Choose a rating">
+        <button type="button" data-rating="1" aria-label="1 star">★</button>
+        <button type="button" data-rating="2" aria-label="2 stars">★</button>
+        <button type="button" data-rating="3" aria-label="3 stars">★</button>
+        <button type="button" data-rating="4" aria-label="4 stars">★</button>
+        <button type="button" data-rating="5" aria-label="5 stars" class="selected">★</button>
+      </div>
+      <p id="rating-label">5 stars · A great experience</p>
+      <label class="field-label" for="feedback">Tell us about your visit</label>
+      <textarea id="feedback" minlength="8" maxlength="1200" required placeholder="The food, service, ambience…"></textarea>
+      <div class="count-row"><span>Your honest feedback is always welcome.</span><span id="counter">0 / 1200</span></div>
+      <label class="field-label" for="tone">Choose your writing style</label>
+      <select id="tone">
+        <option value="natural">Natural &amp; simple</option>
+        <option value="warm">Warm &amp; friendly</option>
+        <option value="polished">Polished &amp; professional</option>
+      </select>
+      <button class="create-button" type="submit">✧ &nbsp; CREATE MY REVIEW &nbsp; ↗</button>
+      <p class="note">Your draft is editable. Nothing posts automatically.</p>
+    </form>
+    <section id="draft-section" hidden>
+      <div class="gold-divider"></div>
+      <p class="draft-eyebrow">MADE FROM YOUR WORDS</p>
+      <h2>Your review draft</h2>
+      <p class="draft-note">Edit it so it accurately reflects your visit.</p>
+      <textarea id="draft" aria-label="Edit your review draft" maxlength="1500"></textarea>
+      <div class="draft-actions">
+        <button id="copy-button" class="copy-button" type="button">COPY DRAFT</button>
+        <button id="google-button" class="google-button" type="button">CONTINUE TO GOOGLE ↗</button>
+      </div>
+      <p class="note">Google will open separately. Paste your draft and submit it yourself.</p>
+    </section>
+    <a class="direct-link" href="https://search.google.com/local/writereview?placeid=ChIJQ2IXQABDfDkRTvaldq2c-9g" target="_blank" rel="noopener">Open Google review form directly ↗</a>
+  </section>
+  <footer><span>AMANTE</span><span>Made with care · Bhopal</span></footer>
+</main>
+<script src="./app.js" defer></script>
+</body></html>

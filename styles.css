@@ -1,0 +1,44 @@
+:root{--pink:#f7d5df;--cream:#fffaf2;--wine:#4e1028;--gold:#b38a3e;--muted:#897477;--line:#ddc49a;--text:#3d2b30}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--text);font-family:Georgia,"Times New Roman",serif}
+.brand-banner{min-height:330px;position:relative;overflow:hidden;background:linear-gradient(120deg,#f8dbe3,#f3c5d2 60%,#eebfce);border-bottom:1px solid #d8bd87}
+.brand-banner:before,.brand-banner:after{content:"";position:absolute;top:-50px;width:220px;height:350px;opacity:.24;border:1px solid #a77d4c;border-radius:50%;transform:rotate(28deg)}
+.brand-banner:before{left:-145px}.brand-banner:after{right:-155px;transform:rotate(-28deg)}
+.brand-content{position:relative;z-index:1;text-align:center;padding:34px 15px 30px}
+.logo-ring{width:200px;height:200px;border:2px solid #3e1726;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#f7cbd7;flex-shrink:0}
+.logo-ring img{width:100%;height:100%;object-fit:contain;object-position:center;border-radius:50%;display:block}
+@media(max-width:480px){.brand-banner{min-height:300px}.logo-ring{width:176px;height:176px}}
+.brand-name{font-size:17px;letter-spacing:5px;font-weight:bold;color:var(--wine)}.brand-name span{color:var(--gold);padding:0 5px}
+.ornament{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--gold);margin:14px auto 0}.ornament i{display:block;width:70px;height:1px;background:var(--gold)}.ornament b{font-size:20px;font-weight:normal}
+.page{max-width:850px;margin:0 auto;padding:35px 20px 24px}
+.intro{text-align:center;padding:0 8px 28px}
+.eyebrow{display:flex;align-items:center;justify-content:center;gap:15px;color:var(--gold);font:700 12px/1.4 Arial,sans-serif;letter-spacing:4px;margin:0 auto 18px}.eyebrow i{height:1px;width:clamp(20px,8vw,75px);background:var(--gold)}
+h1{font-size:clamp(48px,8vw,84px);font-weight:normal;line-height:.93;letter-spacing:-2px;color:var(--wine);margin:0 0 22px}h1 em{font-style:normal;color:var(--gold)}
+.intro p{font:clamp(16px,2.6vw,23px)/1.55 Arial,sans-serif;color:var(--muted);margin:0}
+.review-card{border:1px solid var(--line);border-radius:32px;padding:clamp(24px,5vw,48px);background:rgba(255,253,248,.8);box-shadow:0 14px 45px rgba(85,44,46,.06)}
+.field-label{display:block;font-size:clamp(20px,3vw,28px);font-weight:bold;color:var(--wine);margin:24px 0 14px}.field-label:first-child{margin-top:0}
+.stars{display:flex;align-items:center;justify-content:center;gap:clamp(10px,3.3vw,27px);margin:0 auto 5px}.stars button{border:0;background:none;padding:0;color:#dfd1bd;font-size:clamp(43px,7vw,63px);line-height:1;cursor:pointer}.stars button.selected{color:var(--gold)}
+#rating-label{text-align:center;font:14px Arial,sans-serif;color:var(--muted);margin:10px 0 28px}
+textarea,select{display:block;width:100%;border:1px solid #d8c5ad;border-radius:17px;background:#fffdfa;color:var(--text);font:16px/1.55 Arial,sans-serif;padding:18px 20px;outline:none}
+textarea:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px #b38a3e1c}
+#feedback{height:150px;resize:vertical}::placeholder{color:#b2a3a4}
+.count-row{display:flex;justify-content:space-between;gap:12px;color:#a08d8d;font:12px Arial,sans-serif;margin:8px 2px 0}
+select{height:64px;appearance:auto}
+.create-button{width:100%;min-height:78px;border:1px solid #8b4b5d;border-radius:18px;margin-top:26px;background:linear-gradient(110deg,#57142e,#4a1026);color:#fff9f2;font:700 17px Arial,sans-serif;letter-spacing:2px;box-shadow:0 7px 14px #4e102820;cursor:pointer}
+.create-button:hover,.google-button:hover{filter:brightness(1.05)}
+.note{text-align:center;color:#998788;font:14px/1.6 Arial,sans-serif;margin:18px 0 0}
+.direct-link{display:block;text-align:center;margin:24px auto 0;color:var(--wine);font:13px Arial,sans-serif;text-decoration:underline;text-underline-offset:4px}
+.gold-divider{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:35px 0 28px}
+.draft-eyebrow{font:700 11px Arial,sans-serif;letter-spacing:3px;color:var(--gold);margin:0 0 10px}
+h2{font-size:clamp(30px,5vw,42px);font-weight:normal;color:var(--wine);margin:0 0 8px}
+.draft-note{font:14px Arial,sans-serif;color:var(--muted);margin:0 0 15px}
+#draft{min-height:150px;resize:vertical}
+.draft-actions{display:grid;grid-template-columns:1fr 1.5fr;gap:12px;margin-top:13px}
+.copy-button,.google-button{min-height:58px;border-radius:13px;font:700 13px Arial,sans-serif;letter-spacing:1px;cursor:pointer;padding:12px}
+.copy-button{background:#fff3f5;border:1px solid #e3c8cb;color:var(--wine)}
+.google-button{background:var(--pink);border:2px solid var(--gold);color:var(--wine)}
+footer{display:flex;justify-content:space-between;gap:12px;padding:26px 5px 0;color:#a38e8b;font:11px Arial,sans-serif;letter-spacing:1px}footer span:first-child{font:bold 14px Georgia,serif;letter-spacing:3px;color:var(--wine)}
+[hidden]{display:none!important}
+@media(min-width:900px){.brand-banner{min-height:340px}.brand-content{padding-top:34px}}
+@media(max-width:480px){.brand-banner{min-height:275px}.brand-content{padding:27px 12px 22px}.logo-ring{width:145px;height:145px}.brand-name{font-size:14px;letter-spacing:4px}.page{padding:28px 13px 22px}.eyebrow{font-size:9px;letter-spacing:2px;gap:8px}h1{letter-spacing:-1.5px}.review-card{border-radius:24px;padding:23px 19px}.field-label{font-size:20px}.create-button{min-height:66px;font-size:14px;letter-spacing:1.3px}.draft-actions{grid-template-columns:1fr}.count-row{font-size:10px}}
